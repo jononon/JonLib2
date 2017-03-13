@@ -30,3 +30,56 @@ void tankDrive(int leftPower, int rightPower, int deadbands) {
 		abs(rightPower)<deadbands?0:rightPower
 	);
 }
+
+typedef struct {
+	pid left;
+	pid right;
+} drivebase;
+
+void initPIDDrivebase (drivebase *controller, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+	initPIDController(controller->left,  kP, kI, kD, threshold, integralLimit);
+	initPIDController(controller->right, kP, kI, kD, threshold,  integralLimit);
+}
+
+//todo - make these timeout + return false
+bool addMoveTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
+	addTarget(controller->left, leftTarget);
+	addTarget(controller->right, rightTarget);
+}
+
+bool addMoveTargetPID(drivebase *controller, int target) {
+	addMoveTargetPID(controller, target, target);
+}
+
+bool addMoveTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
+	addMoveTargetPID(controller, leftTarget, rightTarget);
+	while(controller->left->error<=controller->left->threshold && controller->right->error<=controller->right->threshold)
+		delay(25);
+}
+
+bool addMoveTargetPIDAuto(drivebase *controller, int target) {
+	addMoveTargetPID(controller, target;
+	while(controller->left->error<=controller->left->threshold && controller->right->error<=controller->right->threshold)
+		delay(25);
+}
+
+bool setMoveTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
+	setTarget(controller->left, leftTarget);
+	setTarget(controller->right, rightTarget);
+}
+
+bool setMoveTargetPID(drivebase *controller, int target) {
+	setMoveTargetPID(controller, target, target);
+}
+
+bool setMoveTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
+	setMoveTargetPID(controller, leftTarget, rightTarget);
+	while(controller->left->error<=controller->left->threshold && controller->right->error<=controller->right->threshold)
+		delay(25);
+}
+
+bool setMoveTargetPIDAuto(drivebase *controller, int target) {
+	setMoveTargetPID(controller, target;
+	while(controller->left->error<=controller->left->threshold && controller->right->error<=controller->right->threshold)
+		delay(25);
+}

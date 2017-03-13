@@ -13,25 +13,12 @@ typedef struct {
 	word threshold;
 } pid;
 
-typedef struct {
-	pid left;
-	pid right;
-} drivebasePID;
-
-void initPIDController (pid *controller, float kP, float kI, float kD, word threshold, word integralLimit) {
+void initPIDController (pid *controller, float kP, float kI, float kD, word threshold = 10, word integralLimit = -1) {
 	controller->kP = kP;
 	controller->kI = kI;
 	controller->kD = kD;
 	controller->threshold = threshold;
 	controller->integralLimit = integralLimit;
-}
-
-void initPIDController (pid *controller, float kP, float kI, float kD, word threshold) {
-	initPIDController(controller, kP, kI, kD, -1);
-}
-
-void initPIDController (pid *controller, float kP, float kI, float kD) {
-	initPIDController(controller, kP, kI, kD, 10);
 }
 
 float updatePIDController (pid *controller, float sensor) {
@@ -48,4 +35,20 @@ float updatePIDController (pid *controller, float sensor) {
 	controller->lastError = controller->error;
 
 	return controller->kP*controller->error + controller->kI*controller->integral + controller->kD*controller->derivative;
+}
+
+void addTarget(pid *controller, float target) {
+	controller->target = controller->target+target;
+}
+
+void setTarget(pid *controller, float target) {
+	controller->target = target;
+}
+
+void setThreshold(pid *controller, word threshold) {
+	controller->threshold = threshold;
+}
+
+void setIntegralLimit(pid *controller, word integralLimit) {
+	controller->integralLimit = integralLimit;
 }

@@ -52,3 +52,13 @@ void setThreshold(pid *controller, word threshold) {
 void setIntegralLimit(pid *controller, word integralLimit) {
 	controller->integralLimit = integralLimit;
 }
+
+void resetSensor (tSensor sensor, int times) {
+	SensorValue[sensor] = 0;
+	if(times>0)
+		resetSensor(sensor, times-1);
+}
+
+void resetSensor (tSensor sensor) {
+	resetSensor(sensor,3);
+}

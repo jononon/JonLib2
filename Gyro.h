@@ -1,3 +1,5 @@
+#pragma systemFile
+
 #define MOVE_TIMEOUT 1000  //timeout for "auto" moves
 #define THRESHOLD_COEFF 2 //expanded size of threshold for timeout function
 
@@ -13,18 +15,59 @@ void addGyroTargetPID (pid *controller, float target) {
 	controller->target = controller->target + target;
 }
 
-bool leftSwingTurnGyroPID (pid *controller, tSensor gyro) {
+bool leftSwingTurnGyroPID (pid *controller, tSensors gyro) {
 	long lastUpdate;
 	while(controller->error>controller->threshold) {
-		setLeftWheelSpeed(updatePIDController(controller, gyro);
+		setLeftWheelSpeed(updatePIDController(controller, gyro));
 
-		if(abs(controller->error)>controller->threshold*THRESHOlD_COEFF)
+		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;
 
-		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT)
+		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {
+			setWheelSpeed(0);
 			return false;
+		}
 
 		delay(25);
 	}
+	setWheelSpeed(0);
+	return true;
+}
+
+bool rightSwingTurnGyroPID (pid *controller, tSensors gyro) {
+	long lastUpdate;
+	while(controller->error>controller->threshold) {
+		setRightWheelSpeed(updatePIDController(controller, gyro));
+
+		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
+			lastUpdate = nPgmTime;
+
+		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {
+			setWheelSpeed(0);
+			return false;
+		}
+
+		delay(25);
+	}
+	setWheelSpeed(0);
+	return true;
+}
+
+bool pointTurnGyroPID (pid *controller, tSensors gyro) {
+	long lastUpdate;
+	while(controller->error>controller->threshold) {
+		spin(updatePIDController(controller, gyro));
+
+		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
+			lastUpdate = nPgmTime;
+
+		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {
+			setWheelSpeed(0);
+			return false;
+		}
+
+		delay(25);
+	}
+	setWheelSpeed(0);
 	return true;
 }

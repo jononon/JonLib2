@@ -1,4 +1,4 @@
-#pragma sourceFile
+#pragma systemFile
 
 typedef struct {
 	float kP;
@@ -53,12 +53,12 @@ void setIntegralLimit(pid *controller, word integralLimit) {
 	controller->integralLimit = integralLimit;
 }
 
-void resetSensor (tSensor sensor, int times) {
+void resetSensor (tSensors sensor, int times) {
 	SensorValue[sensor] = 0;
 	if(times>0)
 		resetSensor(sensor, times-1);
 }
 
-void resetSensor (tSensor sensor) {
+void resetSensor (tSensors sensor) {
 	resetSensor(sensor,3);
 }

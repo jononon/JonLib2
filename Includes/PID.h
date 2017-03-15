@@ -37,7 +37,6 @@ float updatePIDController (pid *controller, word sensor) {
 	return controller->kP*controller->error + controller->kI*controller->integral + controller->kD*controller->derivative;
 }
 
-
 void addTarget(pid *controller, word target) {
 	controller->target = controller->target+target;
 }

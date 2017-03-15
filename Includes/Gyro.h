@@ -1,23 +1,33 @@
 #pragma systemFile
 
-void initPIDGyroscope (pid *controller, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+typedef struct {
+	pid controller;
+	tSensors sensor;
+} gyroscope;
+
+void initPIDGyroscope (gyroscope *gyroController, tSensors sensor, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+	pid *controller = gyroController->controller;
 	initPIDController(controller, kP, kI, kD, threshold, integralLimit);
+	gyroController->sensor = sensor;
 }
 
-void setGyroTargetPID (pid *controller, float target) {
+void setGyroTargetPID (gyroscope *gyroController, float target) {
+	pid *controller = gyroController->controller;
 	controller->target = target;
 }
 
-void addGyroTargetPID (pid *controller, float target) {
+void addGyroTargetPID (gyroscope *gyroController, float target) {
+	pid *controller = gyroController->controller;
 	controller->target = controller->target + target;
 }
 
-bool leftSwingTurnGyroPID (pid *controller, tSensors gyro) {
+bool leftSwingTurnGyroPID (gyroscope *gyroController) {
+	pid *controller = gyroController->controller;
 
 	long lastUpdate = nPgmTime;
 
 	while(controller->error>controller->threshold) {
-		setLeftWheelSpeed(updatePIDController(controller, gyro));
+		setLeftWheelSpeed(updatePIDController(controller, gyroController->sensor));
 
 		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;

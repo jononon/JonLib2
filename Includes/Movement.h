@@ -40,6 +40,11 @@ typedef struct {
 	tSensors rightEncoder;
 } drivebase;
 
+void resetDrivebaseSensors() {
+	resetSensor(leftEnc);
+	resetSensor(rightEnc);
+}
+
 void initPIDDrivebase (drivebase *controller, tSensors leftEncoder, tSensors rightEncoder, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
 	initPIDController(controller->left,  kP, kI, kD, threshold, integralLimit);
 	initPIDController(controller->right, kP, kI, kD, threshold,  integralLimit);
@@ -112,9 +117,4 @@ bool setDrivebaseTargetPIDAuto(drivebase *controller, int leftTarget, int rightT
 
 bool setDrivebaseTargetPIDAuto(drivebase *controller, int target) {
 	return setDrivebaseTargetPIDAuto(controller, target, target);
-}
-
-void resetDrivebaseSensors() {
-	resetSensor(leftEnc);
-	resetSensor(rightEnc);
 }

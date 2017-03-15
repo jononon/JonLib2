@@ -17,12 +17,17 @@ void initPIDController (pid *controller, float kP, float kI, float kD, int thres
 	controller->kP = kP;
 	controller->kI = kI;
 	controller->kD = kD;
+	controller->target = 0;
+	controller->error = 0;
+	controller->integral = 0;
+	controller->derivative = 0;
+	controller->lastError = 0;
 	controller->threshold = threshold;
 	controller->integralLimit = integralLimit;
 }
 
-float updatePIDController (pid *controller, int sensor) {
-	controller->error = controller->target - sensor;
+float updatePIDController (pid *controller, tSensors sensor) {
+	controller->error = controller->target - SensorValue[sensor];
 
 	controller->integral = controller->integral + controller->error;
 

@@ -8,7 +8,7 @@ void setWheelSpeed (int leftWheelSpeed = 127, int rightWheelSpeed = 127) {
 	setRightWheelSpeed(rightWheelSpeed);
 }
 
-void setWheeelSpeed (int speed = 127) {
+void setWheelSpeed (int speed = 127) {
 	setWheelSpeed(speed, speed);
 }
 
@@ -61,14 +61,13 @@ bool drivebasePIDAuto(drivebase *controller) {
 	clearIntegral(left);
 	clearIntegral(right);
 
-	while(left->error<=left->threshold && right->error<=right->threshold) {
-
+	do {
 		setWheelSpeed(
-			updatePIDController(left, SensorValue[controller->leftEncoder]),
-			updatePIDController(right, SensorValue[controller->rightEncoder])
+			updatePIDController(left, controller->leftEncoder),
+			updatePIDController(right, controller->rightEncoder)
 		);
 
-		if(abs(left->error)>left->threshold*THRESHOLD_COEFF || abs(right->error)>right->threshold*THRESHOLD_COEFF)
+		if(abs(left->error)>=left->threshold*THRESHOLD_COEFF || abs(right->error)>=right->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;
 
 		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {
@@ -77,7 +76,7 @@ bool drivebasePIDAuto(drivebase *controller) {
 		}
 
 		delay(25);
-	}
+	} while(abs(left->error)>=left->threshold || abs(right->error)>=right->threshold);
 	setWheelSpeed(0);
 	return true;
 }

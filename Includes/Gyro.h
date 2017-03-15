@@ -26,8 +26,8 @@ bool leftSwingTurnGyroPID (gyroscope *gyroController) {
 
 	long lastUpdate = nPgmTime;
 
-	while(controller->error>controller->threshold) {
-		setLeftWheelSpeed(updatePIDController(controller, SensorValue[gyroController->sensor]));
+	while(abs(controller->error)>controller->threshold) {
+		setLeftWheelSpeed(updatePIDController(controller, gyroController->sensor));
 
 		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;
@@ -48,8 +48,8 @@ bool rightSwingTurnGyroPID (gyroscope *gyroController) {
 
 	long lastUpdate = nPgmTime;
 
-	while(controller->error>controller->threshold) {
-		setRightWheelSpeed(updatePIDController(controller, SensorValue[gyroController->sensor]));
+	while(abs(controller->error)>controller->threshold) {
+		setRightWheelSpeed(updatePIDController(controller, gyroController->sensor));
 
 		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;
@@ -70,8 +70,8 @@ bool pointTurnGyroPID (gyroscope *gyroController) {
 
 	long lastUpdate = nPgmTime;
 
-	while(controller->error>controller->threshold) {
-		spin(updatePIDController(controller, SensorValue[gyroController->sensor]));
+	while(abs(controller->error)>controller->threshold) {
+		spin(updatePIDController(controller, gyroController->sensor));
 
 		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;

@@ -4,11 +4,11 @@ typedef struct {
 	float kP;
 	float kI;
 	float kD;
-	float target;
-	float error;
-	float integral;
-	float derivative;
-	float lastError;
+	word target;
+	word error;
+	word integral;
+	word derivative;
+	word lastError;
 	word integralLimit;
 	word threshold;
 } pid;
@@ -21,7 +21,7 @@ void initPIDController (pid *controller, float kP, float kI, float kD, word thre
 	controller->integralLimit = integralLimit;
 }
 
-float updatePIDController (pid *controller, float sensor) {
+float updatePIDController (pid *controller, word sensor) {
 	controller->error = controller->target - sensor;
 
 	controller->integral = controller->integral + controller->error;
@@ -37,11 +37,15 @@ float updatePIDController (pid *controller, float sensor) {
 	return controller->kP*controller->error + controller->kI*controller->integral + controller->kD*controller->derivative;
 }
 
-void addTarget(pid *controller, float target) {
+float updatePIDController(pid *controller, tSensors sensor) {
+	return updatePIDContoller(controller, SensorValue[sensor]);
+}
+
+void addTarget(pid *controller, word target) {
 	controller->target = controller->target+target;
 }
 
-void setTarget(pid *controller, float target) {
+void setTarget(pid *controller, word target) {
 	controller->target = target;
 }
 

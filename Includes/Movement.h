@@ -113,3 +113,8 @@ bool setDrivebaseTargetPIDAuto(drivebase *controller, int leftTarget, int rightT
 bool setDrivebaseTargetPIDAuto(drivebase *controller, int target) {
 	return setDrivebaseTargetPIDAuto(controller, target, target);
 }
+
+void resetDrivebaseSensors() {
+	resetSensor(leftEnc);
+	resetSensor(rightEnc);
+}

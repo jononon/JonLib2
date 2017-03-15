@@ -34,7 +34,7 @@ bool leftSwingTurnGyroPID (pid *controller, tSensors gyro) {
 }
 
 bool rightSwingTurnGyroPID (pid *controller, tSensors gyro) {
-	long lastUpdate = nPgmTime;;
+	long lastUpdate = nPgmTime;
 	while(controller->error>controller->threshold) {
 		setRightWheelSpeed(updatePIDController(controller, gyro));
 
@@ -53,7 +53,7 @@ bool rightSwingTurnGyroPID (pid *controller, tSensors gyro) {
 }
 
 bool pointTurnGyroPID (pid *controller, tSensors gyro) {
-	long lastUpdate = nPgmTime;;
+	long lastUpdate = nPgmTime;
 	while(controller->error>controller->threshold) {
 		spin(updatePIDController(controller, gyro));
 

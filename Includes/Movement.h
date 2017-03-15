@@ -63,7 +63,7 @@ bool drivebasePIDAuto(drivebase *controller) {
 			updatePIDController(right, controller->rightEncoder)
 		);
 
-		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
+		if(abs(left->error)>left->threshold*THRESHOLD_COEFF || abs(right->error)>right->threshold*THRESHOLD_COEFF)
 			lastUpdate = nPgmTime;
 
 		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {

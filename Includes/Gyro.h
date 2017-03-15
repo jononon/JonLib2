@@ -5,7 +5,7 @@ typedef struct {
 	tSensors sensor;
 } gyroscope;
 
-void initPIDGyroscope (gyroscope *gyroController, tSensors sensor, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+void initPIDGyroscope (gyroscope *gyroController, tSensors sensor, float kP,  float kI, float kD, int threshold = 10, int integralLimit = -1) {
 	pid *controller = gyroController->controller;
 	initPIDController(controller, kP, kI, kD, threshold, integralLimit);
 	gyroController->sensor = sensor;

@@ -4,16 +4,16 @@ typedef struct {
 	float kP;
 	float kI;
 	float kD;
-	word target;
-	word error;
-	word integral;
-	word derivative;
-	word lastError;
-	word integralLimit;
-	word threshold;
+	int target;
+	int error;
+	int integral;
+	int derivative;
+	int lastError;
+	int integralLimit;
+	int threshold;
 } pid;
 
-void initPIDController (pid *controller, float kP, float kI, float kD, word threshold = 10, word integralLimit = -1) {
+void initPIDController (pid *controller, float kP, float kI, float kD, int threshold = 10, int integralLimit = -1) {
 	controller->kP = kP;
 	controller->kI = kI;
 	controller->kD = kD;
@@ -21,7 +21,7 @@ void initPIDController (pid *controller, float kP, float kI, float kD, word thre
 	controller->integralLimit = integralLimit;
 }
 
-float updatePIDController (pid *controller, word sensor) {
+float updatePIDController (pid *controller, int sensor) {
 	controller->error = controller->target - sensor;
 
 	controller->integral = controller->integral + controller->error;
@@ -37,19 +37,19 @@ float updatePIDController (pid *controller, word sensor) {
 	return controller->kP*controller->error + controller->kI*controller->integral + controller->kD*controller->derivative;
 }
 
-void addTarget(pid *controller, word target) {
+void addTarget(pid *controller, int target) {
 	controller->target = controller->target+target;
 }
 
-void setTarget(pid *controller, word target) {
+void setTarget(pid *controller, int target) {
 	controller->target = target;
 }
 
-void setThreshold(pid *controller, word threshold) {
+void setThreshold(pid *controller, int threshold) {
 	controller->threshold = threshold;
 }
 
-void setIntegralLimit(pid *controller, word integralLimit) {
+void setIntegralLimit(pid *controller, int integralLimit) {
 	controller->integralLimit = integralLimit;
 }
 

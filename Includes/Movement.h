@@ -45,7 +45,7 @@ void resetDrivebaseSensors() {
 	resetSensor(rightEnc);
 }
 
-void initPIDDrivebase (drivebase *controller, tSensors leftEncoder, tSensors rightEncoder, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+void initPIDDrivebase (drivebase *controller, tSensors leftEncoder, tSensors rightEncoder, float kP,  float kI, float kD, int threshold = 10, int integralLimit = -1) {
 	initPIDController(controller->left,  kP, kI, kD, threshold, integralLimit);
 	initPIDController(controller->right, kP, kI, kD, threshold,  integralLimit);
 	controller->leftEncoder = leftEncoder;

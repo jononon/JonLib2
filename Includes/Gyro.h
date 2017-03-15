@@ -1,8 +1,5 @@
 #pragma systemFile
 
-#define MOVE_TIMEOUT 1000  //timeout for "auto" moves
-#define THRESHOLD_COEFF 2 //expanded size of threshold for timeout function
-
 void initPIDGyroscope (pid *controller, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
 	initPIDController(controller, kP, kI, kD, threshold, integralLimit);
 }

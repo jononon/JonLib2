@@ -1,8 +1,5 @@
 #pragma systemFile
 
-#define MOVE_TIMEOUT 1000  //timeout for "auto" moves
-#define THRESHOLD_COEFF 2 //expanded size of threshold for timeout function
-
 void setLeftWheelSpeed (int speed = 127);
 void setRightWheelSpeed (int speed = 127);
 

@@ -1,3 +1,4 @@
+#pragma systemFile
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*        Description: VEX Competition Control Include File                  */
@@ -56,7 +57,7 @@ bool bStopTasksBetweenModes = true;
 // This global is used to disable the status display on the LCD by the code
 // in this file.  The user may want to use the LCD during the pre_auton
 // function and not have it overwritten by calls to displayStatusAndTime
-bool bDisplayCompetitionStatusOnLcd = true;
+bool bDisplayCompetitionStatusOnLcd = false;
 
 // There will also be many other errors but perhaps this will be noticed as it
 // will be at the top of the list.  VEX platform is left for legacy reasons.
@@ -230,25 +231,25 @@ static void displayStatusAndTime( bool reset )
 		return;
 	}
 
- // displayLCDPos(0, 0);
-	//if (bIfiRobotDisabled)
-	//	displayNextLCDString("Disabled");
+ displayLCDPos(0, 0);
+	if (bIfiRobotDisabled)
+		displayNextLCDString("Disabled");
 
- // displayLCDPos(1, 0);
-	//if (bIfiRobotDisabled)
-	//  displayNextLCDString("Disable ");
-	//else
-	//{
-	//  if (bIfiAutonomousMode)
-	//    displayNextLCDString("Auton  ");
-	//  else
-	//    displayNextLCDString("Driver ");
-	//}
-	//displayNextLCDNumber(nDisplayAndStatusTimer / 600, 2);
-	//displayNextLCDChar(':');
-	//displayNextLCDNumber((nDisplayAndStatusTimer / 10) % 60, -2);
-	//displayNextLCDChar('.');
-	//displayNextLCDNumber(nDisplayAndStatusTimer % 10, 1);
+ displayLCDPos(1, 0);
+	if (bIfiRobotDisabled)
+	 displayNextLCDString("Disable ");
+	else
+	{
+	 if (bIfiAutonomousMode)
+	   displayNextLCDString("Auton  ");
+	 else
+	   displayNextLCDString("Driver ");
+	}
+	displayNextLCDNumber(nDisplayAndStatusTimer / 600, 2);
+	displayNextLCDChar(':');
+	displayNextLCDNumber((nDisplayAndStatusTimer / 10) % 60, -2);
+	displayNextLCDChar('.');
+	displayNextLCDNumber(nDisplayAndStatusTimer % 10, 1);
 	++nDisplayAndStatusTimer;
 }
 

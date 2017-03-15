@@ -1,5 +1,8 @@
 #pragma systemFile
 
+#define MOVE_TIMEOUT 1000  //timeout for "auto" moves
+#define THRESHOLD_COEFF 2 //expanded size of threshold for timeout function
+
 void setLeftWheelSpeed (int speed = 127);
 void setRightWheelSpeed (int speed = 127);
 
@@ -36,64 +39,80 @@ void tankDrive(int leftPower, int rightPower, int deadbands) {
 typedef struct {
 	pid left;
 	pid right;
+	tSensors leftEncoder;
+	tSensors rightEncoder;
 } drivebase;
 
-void initPIDDrivebase (drivebase *controller, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
+void initPIDDrivebase (drivebase *controller, tSensors leftEncoder, tSensors rightEncoder, float kP,  float kI, float kD, word threshold = 10, word integralLimit = -1) {
 	initPIDController(controller->left,  kP, kI, kD, threshold, integralLimit);
 	initPIDController(controller->right, kP, kI, kD, threshold,  integralLimit);
+	controller->leftEncoder = leftEncoder;
+	controller->rightEncoder = rightEncoder;
+}
+
+bool drivebasePIDAuto(drivebase *controller) {
+	long lastUpdate = nPgmTime;
+
+	pid *left = controller->left;
+	pid *right = controller->right;
+
+	clearIntegral(left);
+	clearIntegral(right);
+
+	while(left->error<=left->threshold && right->error<=right->threshold) {
+
+		setWheelSpeed(
+			updatePIDController(left, controller->leftEncoder),
+			updatePIDController(right, controller->rightEncoder)
+		);
+
+		if(abs(controller->error)>controller->threshold*THRESHOLD_COEFF)
+			lastUpdate = nPgmTime;
+
+		if((nPgmTime-lastUpdate)>MOVE_TIMEOUT) {
+			setWheelSpeed(0);
+			return false;
+		}
+
+		delay(25);
+	}
+	setWheelSpeed(0);
+	return true;
 }
 
 //todo - make these timeout + return false
-void addMoveTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
+void addDrivebaseTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
 	addTarget(controller->left, leftTarget);
 	addTarget(controller->right, rightTarget);
 }
 
-void addMoveTargetPID(drivebase *controller, int target) {
-	addMoveTargetPID(controller, target, target);
+void addDrivebaseTargetPID(drivebase *controller, int target) {
+	addDrivebaseTargetPID(controller, target, target);
 }
 
-bool addMoveTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
-	addMoveTargetPID(controller, leftTarget, rightTarget);
-	pid *left = controller->left;
-	pid *right = controller->right;
-	while(left->error<=left->threshold && right->error<=right->threshold)
-		delay(25);
-	return true;
+bool addDrivebaseTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
+	addDrivebaseTargetPID(controller, leftTarget, rightTarget);
+	return drivebasePIDAuto(controller);
 }
 
-bool addMoveTargetPIDAuto(drivebase *controller, int target) {
-	addMoveTargetPID(controller, target);
-	pid *left = controller->left;
-	pid *right = controller->right;
-	while(left->error<=left->threshold && right->error<=right->threshold)
-		delay(25);
-	return true;
+bool addDrivebaseTargetPIDAuto(drivebase *controller, int target) {
+	return addDrivebaseTargetPIDAuto(controller, target, target);
 }
 
-void setMoveTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
+void setDrivebaseTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
 	setTarget(controller->left, leftTarget);
 	setTarget(controller->right, rightTarget);
 }
 
-void setMoveTargetPID(drivebase *controller, int target) {
-	setMoveTargetPID(controller, target, target);
+void setDrivebaseTargetPID(drivebase *controller, int target) {
+	setDrivebaseTargetPID(controller, target, target);
 }
 
-bool setMoveTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
-	setMoveTargetPID(controller, leftTarget, rightTarget);
-	pid *left = controller->left;
-	pid *right = controller->right;
-	while(left->error<=left->threshold && right->error<=right->threshold)
-		delay(25);
-	return true;
+bool setDrivebaseTargetPIDAuto(drivebase *controller, int leftTarget, int rightTarget) {
+	setDrivebaseTargetPID(controller, leftTarget, rightTarget);
+	return drivebasePIDAuto(controller);
 }
 
-bool setMoveTargetPIDAuto(drivebase *controller, int target) {
-	setMoveTargetPID(controller, target);
-	pid *left = controller->left;
-	pid *right = controller->right;
-	while(left->error<=left->threshold && right->error<=right->threshold)
-		delay(25);
-	return true;
+bool setDrivebaseTargetPIDAuto(drivebase *controller, int target) {
+	return setDrivebaseTargetPIDAuto(controller, target, target);
 }

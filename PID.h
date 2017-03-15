@@ -53,6 +53,10 @@ void setIntegralLimit(pid *controller, word integralLimit) {
 	controller->integralLimit = integralLimit;
 }
 
+void clearIntegral(pid *controller) {
+	controller->integral = 0;
+}
+
 void resetSensor (tSensors sensor, int times) {
 	SensorValue[sensor] = 0;
 	if(times>0)

@@ -83,8 +83,8 @@ bool drivebasePIDAuto(drivebase *controller) {
 
 //todo - make these timeout + return false
 void addDrivebaseTargetPID(drivebase *controller,  int leftTarget, int rightTarget) {
-	addTarget(controller->left, leftTarget);
-	addTarget(controller->right, rightTarget);
+	setTarget(controller->left, SensorValue[controller->leftEncoder]+leftTarget);
+	setTarget(controller->right, SensorValue[controller->rightEncoder]+rightTarget);
 }
 
 void addDrivebaseTargetPID(drivebase *controller, int target) {

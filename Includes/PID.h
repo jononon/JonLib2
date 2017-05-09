@@ -42,9 +42,10 @@ float updatePIDController (pid *controller, tSensors sensor) {
 	return controller->kP*controller->error + controller->kI*controller->integral + controller->kD*controller->derivative;
 }
 
-void addTarget(pid *controller, int target) {
-	controller->target = controller->target+target;
-}
+// DEPRECATED - does not add to CURRENT ENCODER, rather adds to TARGET, allowing error in the real world
+// void addTarget(pid *controller, int target) {
+// 	controller->target = controller->target+target;
+// }
 
 void setTarget(pid *controller, int target) {
 	controller->target = target;

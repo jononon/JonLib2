@@ -12,13 +12,11 @@ void initPIDGyroscope (gyroscope *gyroController, tSensors sensor, float kP,  fl
 }
 
 void setGyroTargetPID (gyroscope *gyroController, float target) {
-	pid *controller = gyroController->controller;
-	controller->target = target;
+	setTarget(gyroController->controller, target);
 }
 
 void addGyroTargetPID (gyroscope *gyroController, float target) {
-	pid *controller = gyroController->controller;
-	controller->target = controller->target + target;
+	setTarget(gyroController->controller, SensorValue[gyroController->sensor]+target);
 }
 
 bool leftSwingTurnGyroPID (gyroscope *gyroController) {
